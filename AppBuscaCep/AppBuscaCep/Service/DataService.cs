@@ -27,7 +27,7 @@ namespace AppBuscaCep.Service
 
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("" + cep);
+                HttpResponseMessage response = await client.GetAsync("https://cep.metoda.com.br/endereco/by-cep?cep=" + cep);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -42,7 +42,7 @@ namespace AppBuscaCep.Service
         }
 
         //LOGRADOURO
-        public static async Task<List<Logradouro>> GetLogradouroByBairroAndIdCidade(string bairro, int id_cidade )
+        public static async Task<List<Logradouro>> GetLogradouroByBairroAndIdCidade(string bairro, string id_cidade )
         {
 
             List<Logradouro> arr_log = new List<Logradouro>();
@@ -81,12 +81,12 @@ namespace AppBuscaCep.Service
         }
         //BAIRRO PELO ID CIDADE
 
-        public static async Task<List<Bairro>> GetBairrosByIdCidade(int id_cidade)
+        public static async Task<List<Bairro>> GetBairrosByIdCidade(string cidade)
         {
             List<Bairro> arr_bairros = new List<Bairro>();
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("" + arr_bairros);
+                HttpResponseMessage response = await client.GetAsync("https://cep.metoda.com.br/bairro/by-cidade?id=" + arr_bairros);
                 if (response.IsSuccessStatusCode)
                 {
                     string json = response.Content.ReadAsStringAsync().Result;
