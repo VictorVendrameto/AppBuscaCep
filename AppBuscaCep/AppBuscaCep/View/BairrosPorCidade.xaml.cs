@@ -26,33 +26,36 @@ namespace AppBuscaCep.View
             InitializeComponent();
 
             pck_cidade.ItemsSource = lista_cidades;
-            pck_bairro.ItemsSource = lista_bairros;
+            lst_bairro.ItemsSource = lista_bairros;
         }
 
-        private async void Button_Clicked(object sender, EventArgs e)
+        private async void pck_estado_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                carregando.IsRunning = true;
-                List<Bairro> arr_bairros= await DataService.GetBairrosByIdCidade(
-                    txt_cidade.Text);
+                Picker disparador = sender as Picker;
 
-                lst_bairro.ItemsSource = arr_bairros;
+                string estado_selec = disparador.SelectedItem as string;
+
+                List<Cidade> arr_cidades= await DataService.GetCidadeByEstado(estado_selec);
+
+                lista_cidades.Clear();
+
+                arr_cidades.ForEach(i => lista_cidades.Add(i));
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Ops", ex.Message, "OK");
             }
-            finally
-            {
-                carregando.IsRunning = false;
-            }
+            
         }
 
         private async void pck_cidade_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
+                carregando.IsRunning = true;
+
                 Picker disparador = sender as Picker;
 
                 Cidade cidade_selec = disparador.SelectedItem as Cidade;
@@ -66,6 +69,10 @@ namespace AppBuscaCep.View
             catch(Exception ex)
             {
                 await DisplayAlert("Ops", ex.Message, "OK");
+            }
+            finally
+            {
+                carregando.IsRunning = false;
             }
         }
     }
